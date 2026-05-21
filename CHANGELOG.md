@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+
+### Added
+- 
+
+### Changed
+- 
+
+### Fixed
+- 
+
+## [2.1.1] - 2026-05-21
 
 ## [2.1.0] - 2026-04-20
 
@@ -314,7 +324,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Code quality enforcement (Black, isort, flake8)
 - Hassfest and HACS validation
 
-[Unreleased]: https://github.com/andreas-glaser/ha-dessmonitor/compare/v2.1.0...HEAD
 [2.1.0]: https://github.com/andreas-glaser/ha-dessmonitor/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/andreas-glaser/ha-dessmonitor/compare/v1.9.0...v2.0.0
 [1.9.0]: https://github.com/andreas-glaser/ha-dessmonitor/compare/v1.8.0...v1.9.0
@@ -331,3 +340,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.4.4]: https://github.com/andreas-glaser/ha-dessmonitor/compare/v1.4.3...v1.4.4
 [1.1.0]: https://github.com/andreas-glaser/ha-dessmonitor/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/andreas-glaser/ha-dessmonitor/releases/tag/v1.0.0
+
+[Unreleased]: https://github.com/andreas-glaser/ha-dessmonitor/compare/v2.1.1...HEAD
+[2.1.1]: https://github.com/andreas-glaser/ha-dessmonitor/releases/tag/v2.1.1
