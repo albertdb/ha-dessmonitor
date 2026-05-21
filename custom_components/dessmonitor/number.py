@@ -121,7 +121,39 @@ class DessMonitorNumber(CoordinatorEntity, NumberEntity):
         self._param_id = param_id
         self._attr_native_unit_of_measurement = unit
 
-        self._apply_hint(hint)
+        # -- Resolve user-configured bulk voltage limits --
+        user_min = 0.0
+        user_max = 0.0
+        if name in _BULK_VOLTAGE_FIELD_NAMES:
+            try:
+                entry = coordinator.hass.config_entries.async_get_entry(
+                    coordinator.config_entry.entry_id
+                )
+                if entry:
+                    user_min = float(
+                        entry.options.get(
+                            CONF_BULK_VOLTAGE_MIN,
+                            entry.data.get(CONF_BULK_VOLTAGE_MIN, 0.0),
+                        )
+                    )
+                    user_max = float(
+                        entry.options.get(
+                            CONF_BULK_VOLTAGE_MAX,
+                            entry.data.get(CONF_BULK_VOLTAGE_MAX, 0.0),
+                        )
+                    )
+                    if user_min > 0 and user_max > 0 and user_min < user_max:
+                        _LOGGER.debug(
+                            "Bulk voltage override for %s: API hint=%s -> user=[%s, %s]",
+                            device_sn, hint, user_min, user_max,
+                        )
+            except Exception as err:  # pylint: disable=broad-except
+                _LOGGER.warning(
+                    "Failed to read bulk voltage override for %s: %s",
+                    device_sn, err,
+                )
+
+        self._apply_hint(hint, user_min=user_min, user_max=user_max)
 
         # Initialize identity
         device_alias = device_meta.get("alias", "DessMonitor")
@@ -157,15 +189,27 @@ class DessMonitorNumber(CoordinatorEntity, NumberEntity):
                 pass
         return None, None
 
-    def _apply_hint(self, hint: str | None) -> None:
-        """Set min/max/step from the API hint field."""
-        if not hint:
-            return
-        lo, hi = self._parse_hint_range(hint)
-        if lo is not None:
-            self._attr_native_min_value = lo
-        if hi is not None:
-            self._attr_native_max_value = hi
+    def _apply_hint(
+        self,
+        hint: str | None,
+        *,
+        user_min: float = 0.0,
+        user_max: float = 0.0,
+    ) -> None:
+        """Set min/max/step from the API hint field or user-configured values."""
+        effective_hint = hint
+
+        # If user provided explicit min/max (>0), build a synthetic hint
+        if user_min > 0 and user_max > 0 and user_min < user_max:
+            effective_hint = f"{user_min}~{user_max}V"
+
+        if effective_hint:
+            lo, hi = self._parse_hint_range(effective_hint)
+            if lo is not None:
+                self._attr_native_min_value = lo
+            if hi is not None:
+                self._attr_native_max_value = hi
+
         unit = self._attr_native_unit_of_measurement or ""
         if unit in ("V", "A"):
             self._attr_native_step = 0.1
