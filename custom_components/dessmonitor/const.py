@@ -691,3 +691,6 @@ BINARY_SENSOR_TYPES: dict = {}
 # Reserved for future diagnostic sensor types
 # Not currently used but maintained for future expansion
 DIAGNOSTIC_SENSOR_TYPES: dict = {}
+
+CONF_BULK_VOLTAGE_MIN: Final = "bulk_voltage_min"
+CONF_BULK_VOLTAGE_MAX: Final = "bulk_voltage_max"

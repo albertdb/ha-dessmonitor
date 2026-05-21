@@ -31,12 +31,16 @@
     "step": {
       "init": {
         "title": "DessMonitor Options",
-        "description": "Configure advanced options for your DessMonitor integration.",
+        "description": "Configure advanced options. Define the bulk voltage range manually or set both values to 0 to use the limits reported by the inverter API.",
         "data": {
-          "update_interval": "Update interval (seconds)"
+          "update_interval": "Update interval (seconds)",
+          "bulk_voltage_min": "Bulk minimum voltage (V)",
+          "bulk_voltage_max": "Bulk maximum voltage (V)"
         },
         "data_description": {
-          "update_interval": "How often to fetch data from DessMonitor (minimum 60 seconds)"
+          "update_interval": "How often to fetch data from DessMonitor (minimum 60 seconds)",
+          "bulk_voltage_min": "Lower limit of the bulk charging voltage range. Set to 0 to use the value reported by the API.",
+          "bulk_voltage_max": "Upper limit of the bulk charging voltage range. Set to 0 to use the value reported by the API."
         }
       }
     }

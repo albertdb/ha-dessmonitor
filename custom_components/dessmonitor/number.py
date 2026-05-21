@@ -14,11 +14,18 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from . import DessMonitorDataUpdateCoordinator
-from .const import DOMAIN
+from .const import CONF_BULK_VOLTAGE_MAX, CONF_BULK_VOLTAGE_MIN, DOMAIN
 from .device_support.device_registry import map_control_field
 from .utils import create_device_info
 
 _LOGGER = logging.getLogger(__name__)
+
+# API control field names that correspond to bulk charging voltage
+_BULK_VOLTAGE_FIELD_NAMES = frozenset({
+    "Bulk Charging Voltage",
+    "Bulk charging voltage",
+    "BULK_CHARGING_VOLTAGE",
+})
 
 
 async def async_setup_entry(

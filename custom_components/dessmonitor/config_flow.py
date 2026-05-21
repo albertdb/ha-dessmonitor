@@ -14,6 +14,8 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import DessMonitorAPI, DessMonitorError
 from .const import (
+    CONF_BULK_VOLTAGE_MAX,
+    CONF_BULK_VOLTAGE_MIN,
     CONF_COMPANY_KEY,
     CONF_PASSWORD,
     CONF_UPDATE_INTERVAL,
@@ -231,6 +233,16 @@ class OptionsFlow(config_entries.OptionsFlow):
             "Showing options form with current interval: %ds", current_interval
         )
 
+        # Read current bulk voltage values
+        current_bulk_min = self._config_entry.options.get(
+            CONF_BULK_VOLTAGE_MIN,
+            self._config_entry.data.get(CONF_BULK_VOLTAGE_MIN, 0.0),
+        )
+        current_bulk_max = self._config_entry.options.get(
+            CONF_BULK_VOLTAGE_MAX,
+            self._config_entry.data.get(CONF_BULK_VOLTAGE_MAX, 0.0),
+        )
+
         return self.async_show_form(
             step_id="init",
             data_schema=vol.Schema(
@@ -239,6 +251,17 @@ class OptionsFlow(config_entries.OptionsFlow):
                         CONF_UPDATE_INTERVAL,
                         default=current_interval,
                     ): vol.In(UPDATE_INTERVAL_OPTIONS),
+                    vol.Optional(
+                        CONF_BULK_VOLTAGE_MIN,
+                        default=float(current_bulk_min),
+                    ): float,
+                    vol.Optional(
+                        CONF_BULK_VOLTAGE_MAX,
+                        default=float(current_bulk_max),
+                    ): float,
                 }
             ),
+            description_placeholders={
+                "bulk_hint": "Set both to 0 to use API-provided values",
+            },
         )
